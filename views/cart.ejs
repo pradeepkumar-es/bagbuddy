@@ -1,6 +1,6 @@
 <%- include('./partials/header') %>
     <div class="w-full h-screen flex">
-
+        <p>welcome back, <%=user.fullName%></p>
         <!-- product and product price -->
         <div class="w-[70%] h-screen flex flex-col">
             <%user.cart.forEach((item)=>{%>
@@ -35,10 +35,10 @@
                             <!-- <h3 class="text-2xl">Clinge Bag</h3> -->
                             <div class="flex items-center gap-2">
                                 <i
-                                    class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-add-line"></i>
+                                    class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i>
                                 <div class="px-2 py-1 rounded-md bg-white text-black">01</div>
                                 <i
-                                    class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i>
+                                    class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-add-line"><a href=""></a></i>
                             </div>
                         </div>
                         <div class="w-[35%] flex items-center justify-between px-5 py-3 bg-[<%=item.textcolor%>]">
@@ -78,7 +78,11 @@
                 <h4 class="text-green-600 font-semibold text-xl">₹<%=totalProductPrice-totalDiscount+20%></h4>
             </div>
             <!-- <h3 class="text-xl text-green-600 font-semibold">₹</h3> -->
-            <a class="mt-3 inline-block" href=""><button class="bg-yellow-400 rounded-md px-3 py-2">Proceed To Buy</button></a>
+             <% if(user.cart.length>0){%>
+                <a class="mt-3 inline-block" href=""><button class="bg-yellow-400 rounded-md px-3 py-2">Proceed To Buy</button></a>
+            <% }else{%>
+                <button class="mt-3 inline-block bg-yellow-100 rounded-md cursor-not-allowed text-zinc-300 px-3 py-2" disabled>Proceed To Buy</button>
+            <%}%>
         </div>
     </div>
 

@@ -25,7 +25,8 @@ module.exports.userRegistration = async (req, res) => {
                 })
                 let token = generateToken(user)
                 res.cookie("token", token)
-                res.send("user created successfully")
+                req.session.user = user;
+                res.redirect("/")
             })
         })
     } catch (err) {
@@ -44,8 +45,10 @@ module.exports.loginUser = async (req, res) => {
     if(result){
         let token = generateToken(user)
         res.cookie('token', token)
+        // After successful authentication
+req.session.user = user; // user is the user object from DB
         // res.send("you can login")
-        res.redirect('/shop')
+        res.redirect('/')
     }else{
         return res.send("email or password are incorrect")
     }
@@ -54,5 +57,6 @@ module.exports.loginUser = async (req, res) => {
 
 module.exports.logoutUser = (req, res)=>{
     res.cookie("token", " ");
+    req.session.user ='';
     res.redirect('/')
 }

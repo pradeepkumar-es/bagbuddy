@@ -1,25 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BagBuddy</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
+  </head>
 
-<body class="font-['helvetica_now_display']">
+  <body class="font-['helvetica_now_display']">
     <nav class="w-full flex justify-between px-5 py-3">
-        <h3 class="text-xl">BagBuddy</h3>
-        <%#  here we are saying that if we have send any value ex. loggedin:false during rendering index.ejs page than typeof it will be not undefined so in this case we will kepp the value same as loggedin value sent, if no loggedin value is sent from slash route than we will change it to true %>
-        <% var loggedin = typeof loggedin !=='undefined' ? loggedin : true %>
+      <h3 class="text-xl"><a href="/">BagBuddy</a></h3>
+      <!-- no need bcz it is handled globally by middleware in app.js before all route -->
+      <!-- <%# here we are saying that if we have send any value ex. loggedin:false
+      during rendering index.ejs page than typeof it will be not undefined so in
+      this case we will kepp the value same as loggedin value sent, if no
+      loggedin value is sent from slash route than we will change it to true %>
+      <% var loggedin = typeof loggedin !=='undefined' ? loggedin : true %> -->
+
+      <div class="flex gap-5">
         <% if(loggedin){%>
-            <div class="flex gap-5">
-            <a href="/shop">Shop</a>
-            <a href="/cart">Cart</a>
-            <a href="/account">My Account</a>
-            <a class="text-red-600" href="/users/logout">Logout</a>
-        </div>
-        <%}%>
+        <!-- <a href="/shop">Shop</a> -->
+        <a href="/cart">Cart</a>
+        <a href="/account">My Account</a>
+        <a class="text-red-600" href="/users/logout">Logout</a>
+        <%}else{%>
+            <a class="text-red-600" href="/users/login">Sign In</a>
+            <%}%>
+      </div>
     </nav>
+  </body>
+</html>
