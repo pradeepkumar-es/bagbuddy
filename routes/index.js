@@ -38,11 +38,12 @@ router.get('/addtocart/:productid', isLoggedIn, async (req, res) => {
         await user.save();
         req.flash("success", "Added to cart");
     }
-    res.redirect('/') //now we can access the value of success flash message at '/shop'
+    res.redirect('/') //now we can access the value of success flash message at 'shop' ejs
     //and always redirect only once 
 })
 
 router.get('/cart', isLoggedIn, async (req, res) => {
+    let error = req.flash("Error");
     let user = await userModel
         .findOne({ email: req.user.email })
         .populate("cart") //making only id of the product in cart to all details of product in cart
@@ -55,6 +56,14 @@ router.get('/cart', isLoggedIn, async (req, res) => {
     })
     // console.log(totalProductPrice)
     console.log(user.cart.length)
-    res.render('cart', { user, totalProductPrice, totalDiscount })
+    res.render('cart', { user,error, totalProductPrice, totalDiscount })
+})
+router.get('/success',(req,res)=>{
+    req.flash("successStatus","Payment Successfull")
+    res.redirect('/');
+})
+router.get('/cancel',(req,res)=>{
+    req.flash("cancel","Payment Failed")
+    res.redirect('/');
 })
 module.exports = router

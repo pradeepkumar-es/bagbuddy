@@ -3,9 +3,9 @@
     <!-- ejs does not support multiline comment  -->
     <!-- to comment single line => <%# .....  %>   -->
     <% if(error.length>0){ %>
-        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500">
+        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 flash-message">
             <span class="inline-block mt-1 mb-1 text-white">
-                <%= error %>
+                <%= error[0] %>
             </span>
         </div>
         <% } %>
@@ -45,4 +45,10 @@
                     </div>
                 </div>
             </div>
+            <script>
+                setTimeout(()=>{
+                const message = document.querySelector('.flash-message');
+                if(message) message.remove();
+                },3000)
+            </script>
             <%- include('./partials/footer') %>

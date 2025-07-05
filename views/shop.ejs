@@ -1,13 +1,29 @@
 <%- include('./partials/header') %>
 
 <% if(success.length>0){ %>
-        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500">
+        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500 flash-message">
             <span class="inline-block mt-1 mb-1 text-white">
                 <%= success %>
             </span>
         </div>
         <% } %>
 
+        <!-- for payment  -->
+<% if(successStatus && successStatus.length>0){ %>
+        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-green-500 flash-message">
+            <span class="inline-block mt-1 mb-1 text-white">
+                <%# flash message is internally stored as an array%>
+                <%= successStatus[0] %>
+            </span>
+        </div>
+        <% } %>
+<% if(cancel && cancel.length>0){ %>
+        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 flash-message">
+            <span class="inline-block mt-1 mb-1 text-white">
+                <%= cancel[0] %>
+            </span>
+        </div>
+        <% } %>
     <div class="w-full h-screen flex items-start px-20 py-20">
         <div class="w-[25%] flex h-screen flex-col items-start">
             <div class="flex items-center gap-2">
@@ -56,4 +72,10 @@
             </div>
         </div>
     </div>
+    <script>
+        setTimeout(()=>{
+            const message = document.querySelector('.flash-message');
+            if(message) message.remove();
+        },3000)
+    </script>
     <%- include('./partials/footer') %>

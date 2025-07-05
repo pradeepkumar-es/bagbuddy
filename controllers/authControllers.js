@@ -14,7 +14,10 @@ module.exports.userRegistration = async (req, res) => {
 
         //code tht will not allow the user to create another account based on email if already created account from that email 
         let user = await userModel.findOne({ email })
-        if (user) return res.status(401).send("You already have account, please login") //401: unauthorized access //indicates that the server requires authentication but the client has not provided valid credentials
+        if(user){
+            req.flash("Error", "You already have account, please login")
+            return res.redirect("/users/login")
+        } 
 
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hash) => {
@@ -24,14 +27,24 @@ module.exports.userRegistration = async (req, res) => {
                     fullName
                 })
                 let token = generateToken(user)
-                res.cookie("token", token)
+                res.cookie("token", token,{
+                    httpOnly:true, //not accessible via JS
+                    secure:false //set True in Production with HTTPS
+                    /*
+                    httpOnly:true -> make the cookie inaccessible to javascript running in the browser(can not accessed via documen.cookie)
+                    purpose: it prevent XSS attackes (cross site scripting), where attackers try to steal cookies via injected scripts
+                    secure:true -> cookie is only sent over https connection (encrypted)
+                    purpose: to prevent cookie theft on unencrypted (http) connections 
+                    */
+                })
                 req.session.user = user;
+                req.flash("success", "Congratulations! Your Account Created Successfully")
                 res.redirect("/")
             })
         })
     } catch (err) {
-        console.log(err.message)
-        res.status(500).send("Error creating user account")
+        req.flash("Error","Error creating user account")
+        res.redirect('/users/login')
     }
 
 }
@@ -39,24 +52,36 @@ module.exports.userRegistration = async (req, res) => {
 module.exports.loginUser = async (req, res) => {
     let { email, password } = req.body;
     let user = await userModel.findOne({ email })
-    if (!user) return res.status(401).send("email or password are incorrect")
+    if (!user){
+        req.flash("Error","email or password are incorrect")
+        return res.redirect('/users/login')
+    } 
     bcrypt.compare(password, user.password, (err, result) => {
     //if result is true
     if(result){
         let token = generateToken(user)
-        res.cookie('token', token)
+        res.cookie('token', token,{
+            httpOnly:true, //not accessible via js
+            secure:false //update it to true when in production
+        })
         // After successful authentication
 req.session.user = user; // user is the user object from DB
         // res.send("you can login")
+        req.flash("success","LoggedIn Successfully")
         res.redirect('/')
     }else{
-        return res.send("email or password are incorrect")
+        req.flash("Error","email or password are incorrect")
+        return res.redirect("/users/login")
     }
     })
 }
 
 module.exports.logoutUser = (req, res)=>{
-    res.cookie("token", " ");
+    res.clearCookie("token",{
+        httpOnly:true,
+        secure:false // update it to true in production
+    })
     req.session.user ='';
+    req.flash("success","Logged Out Successfully")
     res.redirect('/')
 }

@@ -7,6 +7,7 @@ const ownersRouter = require("./routes/ownersRouter");
 const usersRouter = require("./routes/usersRouter");
 const productsRouter = require("./routes/productsRouter");
 const indexRouter = require("./routes/index");
+const payRouter = require("./routes/payRouter")
 const expressSession = require("express-session");
 const flash = require("connect-flash");
 const jwt = require("jsonwebtoken");
@@ -34,6 +35,9 @@ app.use(
     This saves every new session, even if it's empty (not used yet).
     That means a cookie is sent to the user's browser immediately, even before they log in or do anything.
      */
+    cookie:{
+      secure:false //must be false for HTTP dev
+    }
   })
 );
 
@@ -48,6 +52,8 @@ app.set("view engine", "ejs");
 
 app.use((req, res, next) => {
   res.locals.loggedin = !!req.session.user; //to set loggedin variable status as boolean value to all ejs file automatically
+  res.locals.successStatus = req.flash("successStatus"); //make variable available in all ejs file to avoid undefined without waiting to pass through res.send() after certain information
+  res.locals.cancel = req.flash("cancel");
   next();
 });
 
@@ -56,6 +62,8 @@ app.use("/owners", ownersRouter);
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 app.use("/", indexRouter);
+app.use("/", payRouter);
+//we can also use: app.use('/api',payRouter) instead of app.use('/',payRouter)
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
