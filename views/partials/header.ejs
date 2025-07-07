@@ -23,11 +23,12 @@
 
       <div class="flex gap-5">
         <% if(loggedin){%>
-        <!-- <a href="/shop">Shop</a> -->
+        <a href="/">Shop</a>
         <a href="/cart">Cart</a>
         <a href="/account">My Account</a>
         <a class="text-red-600" href="/users/logout">Logout</a>
         <%}else{%>
+            <a href="/">Shop</a>
             <a class="text-red-600" href="/users/login">Sign In</a>
             <%}%>
       </div>

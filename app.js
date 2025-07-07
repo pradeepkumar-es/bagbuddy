@@ -54,6 +54,7 @@ app.use((req, res, next) => {
   res.locals.loggedin = !!req.session.user; //to set loggedin variable status as boolean value to all ejs file automatically
   res.locals.successStatus = req.flash("successStatus"); //make variable available in all ejs file to avoid undefined without waiting to pass through res.send() after certain information
   res.locals.cancel = req.flash("cancel");
+  // res.locals.success = req.flash("success")
   next();
 });
 
