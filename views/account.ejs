@@ -1,18 +1,32 @@
 <%- include('./partials/header') %>
+<% if(success.length>0){ %>
+        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500 flash-message">
+            <span class="inline-block mt-1 mb-1 text-white">
+                <%= success[0] %>
+            </span>
+        </div>
+        <% } %>
+    <% if(error.length>0){ %>
+        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 flash-message">
+            <span class="inline-block mt-1 mb-1 text-white">
+                <%= error[0] %>
+            </span>
+        </div>
+        <% } %>
 <div class="flex flex-row">
     <div class="w-1/5 h-screen bg-[#f7f7f7] p-5">
         <h1 class="text-2xl font-bold">Account</h1>
         <p class="font-light text-zinc-600">Manage your account info</p>
         <div class="mt-5">
-            <p>Profile</p>
+            <p><a href="#profile">Profile</a></p>
             <p><a href="/cart">My Cart</a></p>
             <p><a href="/users/orders">My Orders</a></p>
-            <p>Security</p>
+            <p><a href="#changePassword">Security</a></p>
         </div>
     </div>
     <div class="w-4/5 h-screen bg-[#ffffff] p-5">
         <!-- profile -->
-        <div>
+        <div id="profile"> 
             <h3 class="text-xl font-bold mb-3">Profile Details</h3>
             <hr>
             <div class="flex flex-row mt-3 mb-3">
@@ -68,6 +82,23 @@
         <!-- redirect to car page -->
 
         <!-- Orders: retrive data from stripe payment and database -->
+         <!-- password update -->
+          <div id="changePassword" class="mt-10"> 
+            <h1 class="font-bold text-xl mb-3">Change Password</h1>
+                <hr>
+            <form action="/users/update-password" method="POST" class="mx-40 my-10">
+                <input required class="border rounded-sm border-grey-600 p-1" type="password" name="oldPassword" placeholder="old Password">
+                <input required class="border rounded-sm border-grey-600 p-1" type="password" name="newPassword" placeholder="new Password">
+                <input required class="border rounded-sm border-grey-600 p-1" type="password" name="confirmPassword" placeholder="confirm Password">
+                <input required type="submit" class="bg-yellow-500 px-5 py-1 border border-none rounded-md cursor-pointer">
+            </form>
+          </div>
     </div>
 </div>
+<script>
+    let message = document.querySelector(".flash-message");
+    setTimeout(()=>{
+        if(message) message.remove();
+    },3000)
+</script>
 <%- include('./partials/footer') %>
