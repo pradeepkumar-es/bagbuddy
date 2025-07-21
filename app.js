@@ -9,6 +9,7 @@ const productsRouter = require("./routes/productsRouter");
 const indexRouter = require("./routes/index");
 const payRouter = require("./routes/payRouter")
 const expressSession = require("express-session");
+const mongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const jwt = require("jsonwebtoken");
 require("dotenv").config(); //it loads .env file contents(envirnomental variable) in process.env
@@ -35,7 +36,12 @@ app.use(
     This saves every new session, even if it's empty (not used yet).
     That means a cookie is sent to the user's browser immediately, even before they log in or do anything.
      */
+    store:mongoStore.create({
+      mongoUrl:process.env.MONGODB_URI,
+      collectionName:"sessions"
+    }),
     cookie:{
+      maxAge:7*24*60*60*1000,//expire the session cookie after 7 days, maxAge in cookie expects time in ms, so 1000 is multiplied
       secure:false //must be false for HTTP dev
     }
   })
